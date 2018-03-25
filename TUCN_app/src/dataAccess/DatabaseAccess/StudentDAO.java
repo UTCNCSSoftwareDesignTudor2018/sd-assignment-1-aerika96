@@ -41,6 +41,31 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 		return -1;
 	}
 	
+	public int findByStudentId(String studentId) {
+		Connection connection=null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		String query = new SqlQuery(type.getSimpleName()).createSelectStatement("studentid");
+		try{
+			connection= ConnectionFactory.getConnection();
+			statement= connection.prepareStatement(query);
+			statement.setString(1, studentId);
+			resultSet=statement.executeQuery();
+			List<Students> result= new ArrayList<Students>(createObjects(resultSet));
+			if(result.isEmpty()){
+				throw new NoSuchElementException("No elements found with the student ID "+ studentId);
+			}
+			return result.get(0).getIdstudent();
+		}catch(SQLException e){
+			LOGGER.log(Level.WARNING,"StudentDAO:findByStudentId "+e.getMessage());
+		}finally{
+			ConnectionFactory.close(resultSet);
+			ConnectionFactory.close((Statement)statement);
+			ConnectionFactory.close(connection);
+		}
+		return -1;
+	}
+	
 	
 
 	 public void updateStudId(String nSId, int id) {

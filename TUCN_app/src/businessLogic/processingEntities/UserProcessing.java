@@ -19,7 +19,7 @@ public class UserProcessing {
 
 	private DatabaseAccessObject<Users> dao = new UserDAO();
 
-	private int processLogin(String username, String password) {
+	public int processLogin(String username, String password) {
 		Validator<String> nameValidator = new NameValidator();
 		if(!nameValidator.validate(username) || !nameValidator.validate(password)) {
 			throw new IllegalArgumentException("Password or username not of the correct form");
@@ -31,17 +31,17 @@ public class UserProcessing {
 		
 	}
 	
-	private int teacherOrStudent(int id) {
+	public int teacherOrStudent(int id) {
 		DatabaseAccessObject<Students> sDao = new StudentDAO();
 		DatabaseAccessObject<Teachers> tDao = new TeacherDAO();
 		try {
-			return ((StudentDAO)sDao).findByUserId(id);
+			return -1*((StudentDAO)sDao).findByUserId(id);
 		}catch(NoSuchElementException e){
 			return ((TeacherDAO)tDao).findByUserId(id);
 			
 		}
 	}
-	private void changeName(String name, int id) {
+	public void changeName(String name, int id) {
 		Validator<String> nameValidator = new NameValidator();
 		if(!nameValidator.validate(name)) {
 			throw new IllegalArgumentException("Identity card number not of the correct form");
@@ -50,7 +50,7 @@ public class UserProcessing {
 	}
 	
 	
-	private void changeIdNumber(String idNum, int id) {
+	public void changeIdNumber(String idNum, int id) {
 		Validator<String> idValidator = new IdValidator();
 		if(!idValidator.validate(idNum)) {
 			throw new IllegalArgumentException("Identity card number not of the correct form");
@@ -58,7 +58,7 @@ public class UserProcessing {
 		((UserDAO)dao).updateIdNum(idNum, id);
 	}
 	
-	private void changeCNP(String cnp, int id) {
+	public void changeCNP(String cnp, int id) {
 		Validator<String> cnpValidator = new CNPValidator();
 		if(!cnpValidator.validate(cnp)) {
 			throw new IllegalArgumentException("Personal numeric code not of the correct form");
@@ -66,7 +66,7 @@ public class UserProcessing {
 		((UserDAO)dao).updateCnp(cnp, id);
 	}
 	
-	private void changeAddress(String address, int id) {
+	public void changeAddress(String address, int id) {
 		Validator<String> addressValidator = new AddressValidator();
 		if(!addressValidator.validate(address)) {
 			throw new IllegalArgumentException("Address not of the correct form");

@@ -119,6 +119,33 @@ public class DatabaseAccessObject<T> {
 		return null;
 	
 	}
+	
+	
+	public List<T> findAllBySpecificId(String idName, int id){
+		Connection connection=null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		String query =  new SqlQuery(type.getSimpleName()).createSelectStatement(idName);
+		try{
+			connection= ConnectionFactory.getConnection();
+			statement= connection.prepareStatement(query);
+			statement.setInt(1, id);
+			resultSet=statement.executeQuery();
+			List<T> result = new ArrayList<T>(createObjects(resultSet));
+			if(result.isEmpty()){
+				throw new NoSuchElementException("No elements found with the "+idName+" "+id);
+			}
+			return result;
+		}catch(SQLException e){
+			LOGGER.log(Level.WARNING,type.getName() + "DAO:findBySpecificId "+e.getMessage());
+		}finally{
+			ConnectionFactory.close(resultSet);
+			ConnectionFactory.close((Statement)statement);
+			ConnectionFactory.close(connection);
+		}
+		return null;
+		
+	}
 	 
 	
 	
@@ -146,11 +173,10 @@ public class DatabaseAccessObject<T> {
 		}
 		return null;
 	}
-	/**
-	 * deletes one entry from the table - the one that has the id given as parameter
-	 * @param id
-	 */
-	 public void deleteById(int id){
+	
+	
+	
+	public void deleteById(int id){
 		 Connection connection=null;
 		 PreparedStatement statement=null;
 		 ResultSet result=null;
