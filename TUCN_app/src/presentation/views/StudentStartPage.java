@@ -2,6 +2,7 @@ package presentation.views;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
@@ -9,12 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 public class StudentStartPage implements View {
 	
+	
+
 	JButton changeGroup;
 	JButton changeStudId;
 	JButton changeName;
@@ -114,5 +118,61 @@ public class StudentStartPage implements View {
 		
 	}
 	
+	public void showErrorMessage (String errorMessage){
+		  JOptionPane.showMessageDialog(mainFrame,errorMessage );
+	}
 	
+	public void setGroupData(String nGroup) {
+		this.groupData.setText(nGroup);;
+	}
+
+	public void setStudentIdData(String nStudId) {
+		this.studentIdData.setText(nStudId);
+	}
+
+
+	public void setNameData(String nName) {
+		this.nameData.setText(nName);
+	}
+
+
+	public void setIdData(String nidData) {
+		this.idData.setText(nidData);
+	}
+
+	public void setPersNumbData(String nPers) {
+		this.persNumbData.setText(nPers);
+	}
+
+	public void setAddressData(String nAddress) {
+		this.addressData.setText(nAddress);
+	}
+
+	public void setTakenCourses(JTable takenCourses) {
+		this.takenCourses = takenCourses;
+	}
+	
+	public void addNameListener (ActionListener st){
+		changeName.addActionListener(st);
+	}
+	
+	public void addIdNumberListener (ActionListener st){
+		changeIdentityNumber.addActionListener(st);
+	}
+	
+	public void addPersNumListener (ActionListener st){
+		changePersonalNumber.addActionListener(st);
+	}
+	
+	public void addAddressListener (ActionListener st){
+		changeAddress.addActionListener(st);
+	}
+	
+	public void addGroupListener (ActionListener st){
+		changeGroup.addActionListener(st);
+	}
+	
+	public void addStudIdListener (ActionListener st){
+		changeStudId.addActionListener(st);
+	}
 }

@@ -20,10 +20,58 @@ public class UserProcessing {
 	private DatabaseAccessObject<Users> dao = new UserDAO();
 	
 	public String userName(int id) {
-		return dao.findById(id).getName();
+		try {	
+		if(dao.findBySpecificId("iduser",id).getName() == null) {
+			return new String ("Set name");
+		}
+		return dao.findBySpecificId("iduser",id).getName();
+		}catch(NoSuchElementException e) {
+			return new String ("Set name");
+		}catch(NullPointerException e) {
+			return new String("Set name");
+		}
+	}
+	
+	public String idNum(int id) {
+		try {	
+			if(dao.findBySpecificId("iduser",id).getIdnumber() == null) {
+				return new String ("Set ID number");
+			}
+			return dao.findBySpecificId("iduser",id).getIdnumber();
+			}catch(NoSuchElementException e) {
+				return new String ("Set ID number");
+			}catch(NullPointerException e) {
+				return new String("Set ID number");
+			}
+	}
+	
+	public String persCode(int id) {
+		try {	
+			if(dao.findBySpecificId("iduser",id).getCnp() == null) {
+				return new String ("Set personal numerical code");
+			}
+			return dao.findBySpecificId("iduser",id).getCnp();
+			}catch(NoSuchElementException e) {
+				return new String ("Set personal numerical code");
+			}catch(NullPointerException e) {
+				return new String("Set personal numerical code");
+			}
+	}
+	
+	public String address(int id) {
+		try {	
+			if(dao.findBySpecificId("iduser",id).getAddress() == null) {
+				return new String ("Set address");
+			}
+			return dao.findBySpecificId("iduser",id).getAddress();
+			}catch(NoSuchElementException e) {
+				return new String ("Set address");
+			}catch(NullPointerException e) {
+				return new String("Set address");
+			}
 	}
 
-	public int processLogin(String username, String password) {
+	public int processLogin(String username, String password)throws NoSuchElementException {
 		Validator<String> nameValidator = new NameValidator();
 		if(!nameValidator.validate(username) || !nameValidator.validate(password)) {
 			throw new IllegalArgumentException("Password or username not of the correct form");
@@ -50,7 +98,7 @@ public class UserProcessing {
 		if(!nameValidator.validate(name)) {
 			throw new IllegalArgumentException("Identity card number not of the correct form");
 		}
-		((UserDAO)dao).updateIdNum(name, id);
+		((UserDAO)dao).updateName(name, id);
 	}
 	
 	
@@ -75,7 +123,7 @@ public class UserProcessing {
 		if(!addressValidator.validate(address)) {
 			throw new IllegalArgumentException("Address not of the correct form");
 		}
-		((UserDAO)dao).updateCnp(address, id);
+		((UserDAO)dao).updateAddress(address, id);
 	}
 	
 }

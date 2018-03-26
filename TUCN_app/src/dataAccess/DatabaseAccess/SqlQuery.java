@@ -55,12 +55,12 @@ public class SqlQuery {
 	}
 	
 	
-	public String createUpdateStatement(String field){
+	public String createUpdateStatement(String field, String field2){
 		StringBuilder update = new StringBuilder();
 		update.append("UPDATE ");
 		update.append(table);
 		update.append(" SET "+ field +" = ?");
-		update.append(" WHERE id = ?");
+		update.append(" WHERE "+field2+" = ?");
 		return update.toString();
 	}
 	

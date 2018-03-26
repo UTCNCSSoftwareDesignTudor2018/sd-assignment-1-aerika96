@@ -1,5 +1,7 @@
 package businessLogic.processingEntities;
 
+import java.util.Date;
+
 import dataAccess.DatabaseAccess.CourseDAO;
 import dataAccess.DatabaseAccess.DatabaseAccessObject;
 import dataAccess.DatabaseAccess.EnrollmentDAO;
@@ -17,13 +19,14 @@ public class EnrollmentProcessing {
 		((EnrollmentDAO)eDao).insertEnrollment(sId, cId);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void enrollToExam(int sId, String course) {
 		DatabaseAccessObject<Courses> cDao =  new CourseDAO();
 		DatabaseAccessObject<Enrollments> eDao =  new EnrollmentDAO();
 		DatabaseAccessObject<Exams> exDao =  new ExamDAO();
 		int cId = cDao.findByName(course).getIdcourses();
 		int eId = ((EnrollmentDAO)eDao).findByStudentAndCourse(sId, cId);
-		((ExamDAO)exDao).insertExam(eId,sId, cId);
+		((ExamDAO)exDao).insertExam(eId,sId, cId,new Date().getYear()+1900);
 	}
 
 }

@@ -80,6 +80,10 @@ public class LogInView implements View {
 	public String getPassWord() {
 		return new String(passWord.getPassword());
 	}
+	
+	public void setMainFrameFalse() {
+		mainFrame.setVisible(false);
+	}
 
 	public void addLoginListener (ActionListener st){
 		logIn.addActionListener(st);

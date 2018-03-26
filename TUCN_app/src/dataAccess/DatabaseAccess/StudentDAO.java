@@ -72,7 +72,7 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 		 Connection connection = null;
 		 PreparedStatement statement = null;
 		 ResultSet result = null;
-		 String update = new SqlQuery("Students").createUpdateStatement("studentid");
+		 String update = new SqlQuery("Students").createUpdateStatement("studentid","idstudent");
 		 try {
 			 connection = ConnectionFactory.getConnection();
 			 statement=connection.prepareStatement(update);
@@ -93,7 +93,7 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 		 Connection connection = null;
 		 PreparedStatement statement = null;
 		 ResultSet result = null;
-		 String update = new SqlQuery("Students").createUpdateStatement("group");
+		 String update = new SqlQuery("Students").createUpdateStatement("group_","idstudent");
 		 try {
 			 connection = ConnectionFactory.getConnection();
 			 statement=connection.prepareStatement(update);

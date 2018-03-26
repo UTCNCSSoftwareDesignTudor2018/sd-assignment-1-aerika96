@@ -33,12 +33,12 @@ public class ReportProcessing {
 		
 		List<Integer> userIds = new ArrayList<>();
 		for (Integer src: studentIds) {
-			userIds.add(sDao.findById(src).getUser_iduser());
+			userIds.add(sDao.findBySpecificId("idstudent",src).getUser_iduser());
 		}
 		
 		List<String> users = new ArrayList<>();
 		for(Integer src:userIds) {
-			users.add(uDao.findById(src).getName());
+			users.add(uDao.findBySpecificId("iduser",src).getName());
 		}
 		return users;
 	}
@@ -58,7 +58,7 @@ public class ReportProcessing {
 		
 		List<String> sIds = new ArrayList<>();
 		for (Integer src: studentIds) {
-			sIds.add(sDao.findById(src).getStudentid());
+			sIds.add(sDao.findBySpecificId("idstudent",src).getStudentid());
 		}
 		
 		return sIds;

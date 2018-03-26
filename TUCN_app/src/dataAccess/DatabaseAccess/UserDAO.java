@@ -45,7 +45,7 @@ public class UserDAO extends DatabaseAccessObject<Users>{
 			Connection connection=null;
 			PreparedStatement statement=null;
 			ResultSet result= null;
-			String update=new SqlQuery("Users").createUpdateStatement("name");
+			String update=new SqlQuery("Users").createUpdateStatement("name","iduser");
 			try{
 				connection=ConnectionFactory.getConnection();
 				statement=connection.prepareStatement(update);
@@ -65,7 +65,7 @@ public class UserDAO extends DatabaseAccessObject<Users>{
 		 	Connection connection=null;
 			PreparedStatement statement=null;
 			ResultSet result= null;
-			String update=new SqlQuery("Users").createUpdateStatement("idnumber");
+			String update=new SqlQuery("Users").createUpdateStatement("idnumber","iduser");
 			try{
 				connection=ConnectionFactory.getConnection();
 				statement=connection.prepareStatement(update);
@@ -85,7 +85,7 @@ public class UserDAO extends DatabaseAccessObject<Users>{
 		 Connection connection = null;
 		 PreparedStatement statement = null;
 		 ResultSet result = null;
-		 String update = new SqlQuery("Users").createUpdateStatement("cnp");
+		 String update = new SqlQuery("Users").createUpdateStatement("cnp","iduser");
 		 try {
 			 connection = ConnectionFactory.getConnection();
 			 statement=connection.prepareStatement(update);
@@ -105,7 +105,7 @@ public class UserDAO extends DatabaseAccessObject<Users>{
 		 Connection connection = null;
 		 PreparedStatement statement = null;
 		 ResultSet result = null;
-		 String update = new SqlQuery("Users").createUpdateStatement("address");
+		 String update = new SqlQuery("Users").createUpdateStatement("address","iduser");
 		 try {
 			 connection = ConnectionFactory.getConnection();
 			 statement=connection.prepareStatement(update);

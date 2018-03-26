@@ -94,30 +94,31 @@ public class DatabaseAccessObject<T> {
 	}
 	
 	
-	public T findById(int id){
+	public T findBySpecificId(String idName, int id){
 		Connection connection=null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		String query = new SqlQuery(type.getSimpleName()).createSelectStatement("id");
+		String query =  new SqlQuery(type.getSimpleName()).createSelectStatement(idName);
 		try{
 			connection= ConnectionFactory.getConnection();
 			statement= connection.prepareStatement(query);
 			statement.setInt(1, id);
 			resultSet=statement.executeQuery();
-			List<T> result= new ArrayList<T>(createObjects(resultSet));
+			List<T> result = new ArrayList<T>(createObjects(resultSet));
 			if(result.isEmpty()){
-				throw new NoSuchElementException("No elements found with the id "+id);
+				
+				throw new NoSuchElementException("No elements found with the "+idName+" "+id);
 			}
 			return result.get(0);
 		}catch(SQLException e){
-			LOGGER.log(Level.WARNING,type.getName() + "DAO:findById "+e.getMessage());
+			LOGGER.log(Level.WARNING,type.getName() + "DAO:findBySpecificId "+e.getMessage());
+			return null;
 		}finally{
 			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close((Statement)statement);
 			ConnectionFactory.close(connection);
 		}
-		return null;
-	
+		
 	}
 	
 	

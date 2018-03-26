@@ -7,7 +7,7 @@ public class CNPValidator implements Validator<String> {
 	
 
 	private static final int LENGTH=13;
-	private static final String ID_PATTERN="[1-2][0-9][0-1][1-9][0-3][1-9][0-9]*";
+	private static final String ID_PATTERN="[1-2][0-9]*";
 
 	@Override
 	public boolean validate(String t) {

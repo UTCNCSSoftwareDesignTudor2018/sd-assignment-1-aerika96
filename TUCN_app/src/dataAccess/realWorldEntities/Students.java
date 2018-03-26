@@ -3,7 +3,7 @@ package dataAccess.realWorldEntities;
 public class Students {
 
 	private int idstudent;
-	private int group;
+	private int group_;
 	private String studentid;
 	private int user_iduser;
 	
@@ -19,12 +19,12 @@ public class Students {
 		this.idstudent = idstudent;
 	}
 
-	public int getGroup() {
-		return group;
+	public int getGroup_() {
+		return group_;
 	}
 
-	public void setGroup(int group) {
-		this.group = group;
+	public void setGroup_(int group) {
+		this.group_ = group;
 	}
 
 	public String getStudentid() {
