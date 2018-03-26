@@ -18,6 +18,10 @@ import dataAccess.realWorldEntities.Users;
 public class UserProcessing {
 
 	private DatabaseAccessObject<Users> dao = new UserDAO();
+	
+	public String userName(int id) {
+		return dao.findById(id).getName();
+	}
 
 	public int processLogin(String username, String password) {
 		Validator<String> nameValidator = new NameValidator();

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LogInView {
+public class LogInView implements View {
 
 	private JButton logIn;
 	
@@ -23,6 +23,8 @@ public class LogInView {
 	private JLabel pass;
 	
 	private JPanel center;
+	private JPanel fillIn;
+	private JPanel button;
 	
 	private JFrame mainFrame = new JFrame("Log In");
 	
@@ -34,15 +36,31 @@ public class LogInView {
 		pass = new JLabel("PassWord: ");
 		
 		center = new JPanel();
-		center.add(user);
-		center.add(userName);
-		center.add(pass);
-		center.add(passWord);
-		center.add(logIn);
-		center.setLayout(new GridLayout(0,2));
 		
-		 mainFrame.setLayout(new BorderLayout());
+		fillIn = new JPanel();
+		fillIn.add(user);
+		fillIn.add(userName);
+		fillIn.add(pass);
+		fillIn.add(passWord);
+		fillIn.setLayout(new GridLayout(0,2));
+		
+		button = new JPanel();
+		button.add(new JPanel());
+		button.add(logIn);
+		button.add(new JPanel());
+		button.setLayout(new GridLayout(0,3));
+		
+		
+		center.add(fillIn);
+		center.add(button);
+		center.setLayout(new GridLayout(0,1));
+		
+		 mainFrame.setLayout(new BorderLayout(150,150));
 		 mainFrame.add(center,BorderLayout.CENTER);
+		 mainFrame.add(new JPanel(),BorderLayout.NORTH);
+		 mainFrame.add(new JPanel(),BorderLayout.SOUTH);
+		 mainFrame.add(new JPanel(),BorderLayout.EAST);
+		 mainFrame.add(new JPanel(),BorderLayout.WEST);
 		 mainFrame.pack();    
 		 mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 mainFrame.setVisible(true);
@@ -60,7 +78,7 @@ public class LogInView {
 
 
 	public String getPassWord() {
-		return passWord.getPassword().toString();
+		return new String(passWord.getPassword());
 	}
 
 	public void addLoginListener (ActionListener st){

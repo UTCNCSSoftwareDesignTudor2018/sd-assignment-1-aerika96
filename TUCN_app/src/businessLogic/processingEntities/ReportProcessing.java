@@ -70,6 +70,7 @@ public class ReportProcessing {
 		DatabaseAccessObject<Enrollments> eDao =  new EnrollmentDAO();
 		DatabaseAccessObject<Exams> exDao = new ExamDAO();
 		
+		
 		int sId = ((StudentDAO)sDao).findByStudentId(studentId);
 		int cId = cDao.findByName(courseName).getIdcourses();
 		int eId = ((EnrollmentDAO)eDao).findByStudentAndCourse(sId, cId);

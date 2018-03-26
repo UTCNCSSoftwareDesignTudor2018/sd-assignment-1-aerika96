@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import businessLogic.processingEntities.UserProcessing;
 import presentation.views.LogInView;
+import presentation.views.StudentStartPage;
+import presentation.views.View;
 
 public class Controller {
 	
@@ -12,11 +14,11 @@ public class Controller {
 	private int studentId;
 	private int teacherId;
 	
-	private LogInView login;
+	private View login;
 	
 	public Controller() {
 		login = new LogInView();
-		login.addLoginListener(new LoginListener());
+		((LogInView) login).addLoginListener(new LoginListener());
 		
 	}
 	
@@ -26,16 +28,17 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				UserProcessing userProc =  new UserProcessing();
-				userId = userProc.processLogin(login.getUserName(),login.getPassWord());
+				userId = userProc.processLogin(((LogInView) login).getUserName(),((LogInView) login).getPassWord());
 				int id = userProc.teacherOrStudent(userId);
 				if(id<0) {
 					studentId = -1*id;
+					login = new StudentStartPage();
 				}
 				else {
 					teacherId = id;
 				}
 			}catch(IllegalArgumentException e) {
-				login.showErrorMessage(e.getMessage());
+				((LogInView) login).showErrorMessage(e.getMessage());
 			}
 		}
 		
