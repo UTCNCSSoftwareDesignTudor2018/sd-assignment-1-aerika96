@@ -12,20 +12,19 @@ import dataAccess.realWorldEntities.Exams;
 
 public class ExamDAO extends DatabaseAccessObject<Exams> {
 	
-	private static final String examInsertStatement = "INSERT INTO exams (enrollments_id, enrollments_student, enrollments_course,year)"
+	private static final String examInsertStatement = "INSERT INTO exams (grade,enrollments_id,year)"
 			+ " VALUES (?,?,?)";
 	
-	 public void insertExam(int eId, int sId, int cId, int year) {
+	 public void insertExam(int eId, int year) {
 		 Connection connection = null;
 		 PreparedStatement statement = null;
 		 ResultSet result = null;
 		 try {
 			 connection = ConnectionFactory.getConnection();
 			 statement=connection.prepareStatement(examInsertStatement);
-			 statement.setInt(1,eId);
-			 statement.setInt(2,sId);
-			 statement.setInt(3,cId);
-			 statement.setInt(4,year);
+			 statement.setInt(1,0);
+			 statement.setInt(2,eId);
+			 statement.setInt(3,year);
 			 statement.executeUpdate(); 
 		}catch(SQLException e){
 				LOGGER.log(Level.WARNING,"ExamDAO:insertExam"+e.getMessage());

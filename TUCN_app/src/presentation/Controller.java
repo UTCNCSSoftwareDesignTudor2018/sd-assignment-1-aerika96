@@ -2,15 +2,17 @@ package presentation;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.util.NoSuchElementException;
 
 import javax.swing.JOptionPane;
 
+import businessLogic.processingEntities.CourseProcessing;
+import businessLogic.processingEntities.EnrollmentProcessing;
 import businessLogic.processingEntities.StudentProcessing;
 import businessLogic.processingEntities.UserProcessing;
 import presentation.views.LogInView;
 import presentation.views.StudentStartPage;
-import presentation.views.View;
 
 public class Controller {
 	
@@ -32,12 +34,15 @@ public class Controller {
 		login.setMainFrameFalse();
 		StudentProcessing studProc = new StudentProcessing();
 		UserProcessing userProc = new UserProcessing();
+		CourseProcessing courseProc = new CourseProcessing();
 		student.setGroupData(studProc.getGroup(studentId));
 		student.setStudentIdData(studProc.getStudentId(studentId));
 		student.setNameData(userProc.userName(userId));
 		student.setIdData(userProc.idNum(userId));
 		student.setPersNumbData(userProc.persCode(userId));
 		student.setAddressData(userProc.address(userId));
+		student.setCourse(courseProc.allCourses());
+		student.setTakenCourses(studProc.getAllEnrolled(studentId), new StudentTable());
 		
 		student.addGroupListener(new GroupListener());
 		student.addStudIdListener(new StudIdListener());
@@ -45,12 +50,78 @@ public class Controller {
 		student.addIdNumberListener(new IdListener());
 		student.addPersNumListener(new PersNumListener());
 		student.addAddressListener(new AddressListener());
+		student.addCourseListener(new CourseListener());
 		
 	}
 	void setTeacher() {
 		
 	}
 	void setLogin() {
+		
+	}
+	class StudentTable extends MouseAdapter{
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		    	StudentProcessing studProc =  new StudentProcessing();
+				 EnrollmentProcessing enProc =  new EnrollmentProcessing();
+				 CourseProcessing courseProc =  new CourseProcessing();
+		        int row = student.takenCourses.rowAtPoint(evt.getPoint());
+		        int col = student.takenCourses.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	String course = student.takenCourses.getValueAt(row, 0).toString();
+		        	String status = student.takenCourses.getValueAt(row,1).toString();
+		        	if(status.equals("Exam Taken")) {
+		        		student.showErrorMessage("Exam already taken");
+		        	}
+		        	else {
+		        		String[] choices = { "Yes","No" };
+		   			 String input = (String) JOptionPane.showInputDialog(null, "Do you want to take the "+course+ " exam?",
+		   			        "Choose option", JOptionPane.QUESTION_MESSAGE, null, 
+		   			        choices,
+		   			        choices[0]);
+		   			 try {
+		   			 if(input.equals("Yes")) {
+		   				 enProc.enrollToExam(studentId, course);
+		 	        	 student.setTakenCourses(studProc.getAllEnrolled(studentId), new StudentTable());
+		   			 }
+		   			 }catch(NullPointerException e) {
+		   				 student.showErrorMessage("Maybe next time");
+		   			 }
+		        	
+		        	}
+		        }
+	 }
+	}
+		    
+		
+	
+	
+	
+	class CourseListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+
+	    	StudentProcessing studProc =  new StudentProcessing();
+			 EnrollmentProcessing enProc =  new EnrollmentProcessing();
+			 CourseProcessing courseProc =  new CourseProcessing();
+			 String[] choices = { "Yes","No" };
+			 String input = (String) JOptionPane.showInputDialog(null, "Do you want to take the "+student.getCourse()+ " course?",
+			        "Choose option", JOptionPane.QUESTION_MESSAGE, null, 
+			        choices,
+			        choices[0]);
+			 if(input.equals("Yes")) {
+				 
+				 if(enProc.enrollmentFound(studentId, courseProc.courseIdByName(student.getCourse()))) {
+					 student.showErrorMessage("Course already taken");
+				 }
+				 else {
+					 enProc.enrollToCourse(studentId, student.getCourse());
+	 	        	 student.setTakenCourses(studProc.getAllEnrolled(studentId), new StudentTable());
+				 }
+			 }
+			
+		}
 		
 	}
 	

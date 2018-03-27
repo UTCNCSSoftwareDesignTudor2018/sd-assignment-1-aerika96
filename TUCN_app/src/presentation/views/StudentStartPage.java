@@ -1,10 +1,13 @@
 package presentation.views;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,8 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 public class StudentStartPage implements View {
 	
@@ -32,10 +37,11 @@ public class StudentStartPage implements View {
 	JLabel idData;
 	JLabel persNumbData;
 	JLabel addressData;
+	JPanel courses;
 	
-	JComboBox course;
+	JComboBox<String> course;
 	
-	JTable takenCourses;
+	public JTable takenCourses;
 	
 	private JFrame mainFrame = new JFrame("Student Page");
 	
@@ -61,6 +67,9 @@ public class StudentStartPage implements View {
 		
 		JPanel profile = new JPanel();
 		JPanel student = new JPanel();
+		student.add(studentProfile);
+		student.add(new JLabel());
+		student.add(new JLabel());
 		student.add(new JLabel("Group: "));
 		student.add(groupData);
 		student.add(changeGroup);
@@ -69,6 +78,9 @@ public class StudentStartPage implements View {
 		student.add(changeStudId);
 		student.setLayout(new GridLayout(0,3));
 		JPanel personal = new JPanel();
+		personal.add(personalProfile);
+		personal.add(new JLabel());
+		personal.add(new JLabel());
 		personal.add(new JLabel("Name: "));
 		personal.add(nameData);
 		personal.add(changeName);
@@ -87,16 +99,16 @@ public class StudentStartPage implements View {
 		profile.add(student,BorderLayout.NORTH);
 		profile.add(personal, BorderLayout.CENTER);
 		
-		JPanel courses = new JPanel();
+		 courses = new JPanel();
 		JPanel enrollment = new JPanel();
-		course= new JComboBox();
+		JPanel all = new JPanel();
+		course= new JComboBox<>();
 		enrollment.add(new JLabel("Enroll to a course: "));
 		enrollment.add(course);
 		enrollment.setLayout(new GridLayout(0,2));
-		courses.setLayout(new BorderLayout(50,50));
-		courses.add(enrollment,BorderLayout.NORTH);
-		courses.add(takenCourses,BorderLayout.CENTER);
-		courses.setLayout(new GridLayout(0,1));
+		all.setLayout(new BorderLayout(50,50));
+		all.add(enrollment,BorderLayout.NORTH);
+		all.add(courses,BorderLayout.CENTER);
 		
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -105,7 +117,7 @@ public class StudentStartPage implements View {
 		tabbedPane.addTab("Profile", profile);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-		tabbedPane.addTab("Enrollment", courses);
+		tabbedPane.addTab("Enrollment", all);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 		
 		
@@ -118,6 +130,18 @@ public class StudentStartPage implements View {
 		
 	}
 	
+	
+	public String getCourse() {
+		String value = (String)course.getSelectedItem();
+		return value;
+	}
+
+
+	public void setCourse(String [] crs) {
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(crs );
+		this.course.setModel(model);
+	}
+
 	public void showErrorMessage (String errorMessage){
 		  JOptionPane.showMessageDialog(mainFrame,errorMessage );
 	}
@@ -148,8 +172,18 @@ public class StudentStartPage implements View {
 		this.addressData.setText(nAddress);
 	}
 
-	public void setTakenCourses(JTable takenCourses) {
-		this.takenCourses = takenCourses;
+	public void setTakenCourses(Object[][] data,MouseAdapter mouse) {
+		JTable taken = new JTable(data,new String[]{"Course","Staus","Grade"}) ;
+		this.courses.removeAll();
+		takenCourses =taken;
+		takenCourses.setPreferredScrollableViewportSize(new Dimension(500,200));
+		JScrollPane pane= new JScrollPane(takenCourses,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane.setSize(new Dimension(100,100));
+		this.courses.add(pane);
+		takenCourses.addMouseListener(mouse);
+		this.courses.revalidate();
+		this.courses.repaint();
 	}
 	
 	public void addNameListener (ActionListener st){
@@ -174,5 +208,9 @@ public class StudentStartPage implements View {
 	
 	public void addStudIdListener (ActionListener st){
 		changeStudId.addActionListener(st);
+	}
+	
+	public void addCourseListener(ActionListener st) {
+		course.addActionListener(st);
 	}
 }

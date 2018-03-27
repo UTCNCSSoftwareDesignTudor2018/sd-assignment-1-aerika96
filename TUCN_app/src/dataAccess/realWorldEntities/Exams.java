@@ -5,8 +5,6 @@ public class Exams {
 	private int idexams;
 	private int grade;
 	private int enrollments_id;
-	private int enrollments_student;
-	private int enrollments_course;
 	private int year;
 	
 	
@@ -38,21 +36,6 @@ public class Exams {
 		this.enrollments_id = enrollments_id;
 	}
 
-	public int getEnrollments_student() {
-		return enrollments_student;
-	}
-
-	public void setEnrollments_student(int enrollments_student) {
-		this.enrollments_student = enrollments_student;
-	}
-
-	public int getEnrollments_course() {
-		return enrollments_course;
-	}
-
-	public void setEnrollments_course(int enrollments_course) {
-		this.enrollments_course = enrollments_course;
-	}
 	
 	public int getYear() {
 		return year;

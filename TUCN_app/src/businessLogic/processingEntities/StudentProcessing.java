@@ -1,12 +1,20 @@
 package businessLogic.processingEntities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import businessLogic.Validators.GroupValidator;
 import businessLogic.Validators.IdValidator;
 import businessLogic.Validators.Validator;
+import dataAccess.DatabaseAccess.CourseDAO;
 import dataAccess.DatabaseAccess.DatabaseAccessObject;
+import dataAccess.DatabaseAccess.EnrollmentDAO;
+import dataAccess.DatabaseAccess.ExamDAO;
 import dataAccess.DatabaseAccess.StudentDAO;
+import dataAccess.realWorldEntities.Courses;
+import dataAccess.realWorldEntities.Enrollments;
+import dataAccess.realWorldEntities.Exams;
 import dataAccess.realWorldEntities.Students;
 
 public class StudentProcessing {
@@ -30,6 +38,51 @@ public class StudentProcessing {
 			}catch(NullPointerException e) {
 				return "Set group";
 			}
+	}
+	
+	public Object [][] getAllEnrolled(int id) {
+		DatabaseAccessObject<Enrollments> enDao = new EnrollmentDAO();
+		DatabaseAccessObject<Courses> crsDao = new CourseDAO();
+		DatabaseAccessObject<Exams> exDao = new ExamDAO(); 
+		List<Enrollments> enrolls = new ArrayList<>(enDao.findAllBySpecificId("students_idstudent", id));
+		List<Integer> enrId= new ArrayList<>();
+		List<Integer> cId = new ArrayList<>();
+		List<String> courses = new ArrayList<>();
+		List<String> status = new ArrayList<>();
+		List<String> grading = new ArrayList<>();
+		for(Enrollments src: enrolls) {
+			enrId.add(src.getIdenrollments());
+			cId.add(src.getCourses_idcourses());
+		}
+		for(Integer src: cId) {
+			courses.add(((CourseDAO)crsDao).findBySpecificId("idcourses", src).getName());
+		}
+		for(Integer src: enrId) {
+			try {
+
+				status.add("Exam Taken");
+				if((exDao.findBySpecificId("enrollments_id", src)).getGrade()==0) {
+					grading.add("Not graded");
+				}
+				else {
+					grading.add(""+(exDao.findBySpecificId("enrollments_id", src)).getGrade());
+				}
+				
+			}catch(NoSuchElementException e) {
+				status.add("Exam Not Taken");
+				grading.add("Not graded");
+			}
+		}
+		Object[][] result = new Object[courses.size()][3];
+		System.out.print(courses.size()+ " " +status.size()+" "+ grading.size());
+		for(int i=0; i<courses.size(); i++) {
+			Object[] line= new Object[] {courses.get(i),status.get(i),grading.get(i)};
+			result[i]=line;
+			
+		}
+		return result;
+		
+		
 	}
 	
 	public void changeStudentId(String sId, int id) {

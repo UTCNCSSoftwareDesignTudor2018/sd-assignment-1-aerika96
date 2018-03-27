@@ -4,7 +4,7 @@ public class Courses {
 
 	private int idcourses;
 	private String name;
-	private int teachers_idteachers;
+	private int teachers_idteacher;
 	
 	public Courses(){
 		
@@ -26,12 +26,12 @@ public class Courses {
 		this.name = name;
 	}
 
-	public int getTeachers_idteachers() {
-		return teachers_idteachers;
+	public int getTeachers_idteacher() {
+		return teachers_idteacher;
 	}
 
-	public void setTeachers_idteachers(int teachers_idteachers) {
-		this.teachers_idteachers = teachers_idteachers;
+	public void setTeachers_idteacher(int teachers_idteachers) {
+		this.teachers_idteacher = teachers_idteachers;
 	}
 	
 	
