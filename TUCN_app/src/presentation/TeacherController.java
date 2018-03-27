@@ -21,6 +21,7 @@ public class TeacherController {
 		
 	int userId;
 	int teacherId;
+	String crs;
 	TeacherStartPage teacher;
 	
 	void setTeacher(int uId,int tId) {
@@ -52,13 +53,12 @@ public class TeacherController {
 	        try {
 	        if (row >= 0 && col >= 0) {
 	        	String course = teacher.taughtCourses.getValueAt(row, 0).toString();
+	        	crs= course;
 	        	List<String> names = new ArrayList<>(repProc.namesForGrading(course));
 	        	List<String> studIds = new ArrayList<>(repProc.studentIdsForGrading(course));
 	        	Object[][]students = new Object[names.size()][2];
-	        	System.out.println(names.size()+ " "+studIds.size());
 	        	for(int i=0; i<names.size(); i++) {
 	        		students[i]= new Object[] {names.get(i),studIds.get(i)};
-	        		System.out.println(names.get(i)+ " "+studIds.get(i));
 	        	}
 	    		teacher.setTaughtCourses(students, new String[] {"Name","Student ID"},new TeachersStudentTable());
 	        	
@@ -72,7 +72,30 @@ public class TeacherController {
 	}
 		
 	class TeachersStudentTable extends MouseAdapter{
-		
+		 @Override
+		 public void mouseClicked(java.awt.event.MouseEvent evt) {
+			 ReportProcessing repProc= new ReportProcessing();
+			 int row = teacher.taughtCourses.rowAtPoint(evt.getPoint());
+		     int col = teacher.taughtCourses.columnAtPoint(evt.getPoint());
+		     try {
+			        if (row >= 0 && col >= 0) {
+			        	String name = teacher.taughtCourses.getValueAt(row, 0).toString();
+			        	String studId = teacher.taughtCourses.getValueAt(row, 1).toString();
+			        	String[] choices = { "1", "2", "3", "4", "5", "6","7","8","9","10" };
+					    String input = (String) JOptionPane.showInputDialog(null, "Give a grade to "+name,
+					        "Give a grade", JOptionPane.QUESTION_MESSAGE, null, 
+					        choices, 
+					        choices[0]); 
+			        	int grade = Integer.parseInt(input);
+			        	repProc.giveGrades(crs, studId, grade);
+			        	
+			       }
+			       }catch(NullPointerException e) {
+			    	   
+			       }
+			 
+		 }
+		 
 	}   
 	
 	    

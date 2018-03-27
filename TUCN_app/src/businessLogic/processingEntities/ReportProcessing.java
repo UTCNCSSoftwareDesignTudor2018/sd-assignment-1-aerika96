@@ -75,7 +75,7 @@ public class ReportProcessing {
 		int cId = cDao.findByName(courseName).getIdcourses();
 		int eId = ((EnrollmentDAO)eDao).findByStudentAndCourse(sId, cId);
 		Exams exam = exDao.findAllBySpecificId("enrollments_id", eId).get(0);
-		if(exam.getGrade()>0 && exam.getGrade()<11) {
+		if(exam.getGrade()==0) {
 			((ExamDAO)exDao).updateExam(grade, exam.getIdexams());
 			
 		}
