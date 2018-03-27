@@ -30,15 +30,16 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 			if(result.isEmpty()){
 				throw new NoSuchElementException("No elements found with the user ID "+ uId);
 			}
+			System.out.println(result.get(0).getIdstudent());
 			return result.get(0).getIdstudent();
 		}catch(SQLException e){
 			LOGGER.log(Level.WARNING,"StudentDAO:findByUserId "+e.getMessage());
+			return -1;
 		}finally{
 			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close((Statement)statement);
 			ConnectionFactory.close(connection);
 		}
-		return -1;
 	}
 	
 	public int findByStudentId(String studentId) {

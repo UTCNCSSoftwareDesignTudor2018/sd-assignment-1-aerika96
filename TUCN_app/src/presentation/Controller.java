@@ -42,7 +42,11 @@ public class Controller {
 		student.setPersNumbData(userProc.persCode(userId));
 		student.setAddressData(userProc.address(userId));
 		student.setCourse(courseProc.allCourses());
+		try {
 		student.setTakenCourses(studProc.getAllEnrolled(studentId), new StudentTable());
+		}catch(NoSuchElementException e) {
+			
+		}
 		
 		student.addGroupListener(new GroupListener());
 		student.addStudIdListener(new StudIdListener());
@@ -86,6 +90,8 @@ public class Controller {
 		   			 }
 		   			 }catch(NullPointerException e) {
 		   				 student.showErrorMessage("Maybe next time");
+		   			 }catch(NoSuchElementException e) {
+		   				 
 		   			 }
 		        	
 		        	}
@@ -110,6 +116,7 @@ public class Controller {
 			        "Choose option", JOptionPane.QUESTION_MESSAGE, null, 
 			        choices,
 			        choices[0]);
+			 try {
 			 if(input.equals("Yes")) {
 				 
 				 if(enProc.enrollmentFound(studentId, courseProc.courseIdByName(student.getCourse()))) {
@@ -117,8 +124,15 @@ public class Controller {
 				 }
 				 else {
 					 enProc.enrollToCourse(studentId, student.getCourse());
+					 try {
 	 	        	 student.setTakenCourses(studProc.getAllEnrolled(studentId), new StudentTable());
+					 }catch(NoSuchElementException e) {
+						 
+					 }
 				 }
+			 }
+			 }catch(NullPointerException e) {
+				 
 			 }
 			
 		}

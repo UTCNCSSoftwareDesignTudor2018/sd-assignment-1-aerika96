@@ -60,21 +60,19 @@ public class StudentProcessing {
 		for(Integer src: enrId) {
 			try {
 
-				status.add("Exam Taken");
 				if((exDao.findBySpecificId("enrollments_id", src)).getGrade()==0) {
 					grading.add("Not graded");
 				}
 				else {
 					grading.add(""+(exDao.findBySpecificId("enrollments_id", src)).getGrade());
 				}
-				
+				status.add("Exam Taken");
 			}catch(NoSuchElementException e) {
 				status.add("Exam Not Taken");
 				grading.add("Not graded");
 			}
 		}
 		Object[][] result = new Object[courses.size()][3];
-		System.out.print(courses.size()+ " " +status.size()+" "+ grading.size());
 		for(int i=0; i<courses.size(); i++) {
 			Object[] line= new Object[] {courses.get(i),status.get(i),grading.get(i)};
 			result[i]=line;
