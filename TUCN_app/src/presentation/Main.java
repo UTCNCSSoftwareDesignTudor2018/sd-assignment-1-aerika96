@@ -6,7 +6,9 @@ import java.util.Date;
 public class Main {
 	
 	public static void main(String[] args) {
-		Controller cont= new Controller();
+		StudentController studCont = new StudentController();
+		TeacherController teachCont = new TeacherController();
+		Controller cont= new Controller(studCont,teachCont);
 	}
 
 }

@@ -1,0 +1,172 @@
+package presentation;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.swing.JOptionPane;
+
+import businessLogic.processingEntities.CourseProcessing;
+import businessLogic.processingEntities.EnrollmentProcessing;
+import businessLogic.processingEntities.ReportProcessing;
+import businessLogic.processingEntities.StudentProcessing;
+import businessLogic.processingEntities.UserProcessing;
+import presentation.StudentController.StudentTable;
+import presentation.views.TeacherStartPage;
+
+public class TeacherController {
+		
+	int userId;
+	int teacherId;
+	TeacherStartPage teacher;
+	
+	void setTeacher(int uId,int tId) {
+		userId = uId;
+		teacherId = tId;
+		teacher = new TeacherStartPage();
+		UserProcessing userProc = new UserProcessing();
+		CourseProcessing courseProc = new CourseProcessing();
+		teacher.setNameData(userProc.userName(userId));
+		teacher.setIdData(userProc.idNum(userId));
+		teacher.setPersNumbData(userProc.persCode(userId));
+		teacher.setAddressData(userProc.address(userId));
+		teacher.setTaughtCourses(courseProc.allCoursesByTeacher(teacherId), new String[] {"Course"},new TeachersCourseTable());
+		
+		teacher.addNameListener(new NameListener());
+		teacher.addIdNumberListener(new IdListener());
+		teacher.addPersNumListener(new PersNumListener());
+		teacher.addAddressListener(new AddressListener());
+		teacher.addAddListener(new AddListener());
+		
+	}
+	
+	class TeachersCourseTable extends MouseAdapter{
+		 @Override
+		 public void mouseClicked(java.awt.event.MouseEvent evt) {
+			ReportProcessing repProc= new ReportProcessing();
+	        int row = teacher.taughtCourses.rowAtPoint(evt.getPoint());
+	        int col = teacher.taughtCourses.columnAtPoint(evt.getPoint());
+	        try {
+	        if (row >= 0 && col >= 0) {
+	        	String course = teacher.taughtCourses.getValueAt(row, 0).toString();
+	        	List<String> names = new ArrayList<>(repProc.namesForGrading(course));
+	        	List<String> studIds = new ArrayList<>(repProc.studentIdsForGrading(course));
+	        	Object[][]students = new Object[names.size()][2];
+	        	System.out.println(names.size()+ " "+studIds.size());
+	        	for(int i=0; i<names.size(); i++) {
+	        		students[i]= new Object[] {names.get(i),studIds.get(i)};
+	        		System.out.println(names.get(i)+ " "+studIds.get(i));
+	        	}
+	    		teacher.setTaughtCourses(students, new String[] {"Name","Student ID"},new TeachersStudentTable());
+	        	
+	       }
+	       }catch(NullPointerException e) {
+	    	   
+	       }catch(NoSuchElementException e) {
+	    	   teacher.showErrorMessage("No students taking this course");
+	       }
+	     }
+	}
+		
+	class TeachersStudentTable extends MouseAdapter{
+		
+	}   
+	
+	    
+	
+	class AddListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			CourseProcessing courseProc= new CourseProcessing();
+			try {
+				courseProc.addNewCourse(teacher.getCourse(), teacherId);
+			}catch(IllegalArgumentException ex){
+				teacher.showErrorMessage(ex.getMessage());
+			}catch(NullPointerException ex) {
+				teacher.showErrorMessage("No course name entered");
+			}
+			
+		}
+		
+	}
+	
+	class NameListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			UserProcessing userProc =  new UserProcessing();
+			String input = JOptionPane.showInputDialog("Enter your name:");
+			try {
+			userProc.changeName(input, userId);; 
+			teacher.setNameData(userProc.userName(userId));
+			}catch(IllegalArgumentException ex) {
+				teacher.showErrorMessage(ex.getMessage());
+			}catch(NullPointerException exc) {
+				
+			}
+			
+		}
+		
+	}
+
+	class IdListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			UserProcessing userProc =  new UserProcessing();
+			String input = JOptionPane.showInputDialog("Enter your ID number:");
+			try {
+			userProc.changeIdNumber(input, userId);; 
+			teacher.setIdData(userProc.idNum(userId));
+			}catch(IllegalArgumentException ex) {
+				teacher.showErrorMessage(ex.getMessage());
+			}catch(NullPointerException exc) {
+				
+			}
+			
+		}
+		
+	}
+	class PersNumListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			UserProcessing userProc =  new UserProcessing();
+			String input = JOptionPane.showInputDialog("Enter your personal numerical code:");
+			try {
+			userProc.changeCNP(input, userId);; 
+			teacher.setPersNumbData(userProc.persCode(userId));
+			}catch(IllegalArgumentException ex) {
+				teacher.showErrorMessage(ex.getMessage());
+			}catch(NullPointerException exc) {
+				
+			}
+			
+		}
+		
+	}
+
+	class AddressListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			UserProcessing userProc =  new UserProcessing();
+			String input = JOptionPane.showInputDialog("Enter your address:");
+			try {
+			userProc.changeAddress(input, userId);; 
+			teacher.setAddressData(userProc.address(userId));
+			}catch(IllegalArgumentException ex) {
+				teacher.showErrorMessage(ex.getMessage());
+			}catch(NullPointerException exc) {
+				
+			}
+			
+		}
+		
+	}
+}

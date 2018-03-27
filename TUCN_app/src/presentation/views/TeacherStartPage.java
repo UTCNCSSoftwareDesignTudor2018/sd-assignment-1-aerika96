@@ -144,8 +144,8 @@ public class TeacherStartPage {
 		this.addressData.setText(nAddress);
 	}
 
-	public void setTaughtCourses(Object[][] data,MouseAdapter mouse) {
-		JTable taught = new JTable(data,new String[]{"Course"}) ;
+	public void setTaughtCourses(Object[][] data, String[] headers,MouseAdapter mouse) {
+		JTable taught = new JTable(data,headers) ;
 		this.courses.removeAll();
 		taughtCourses =taught;
 		taughtCourses.setPreferredScrollableViewportSize(new Dimension(500,200));
