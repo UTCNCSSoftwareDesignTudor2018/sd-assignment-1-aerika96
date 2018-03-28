@@ -42,7 +42,7 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 		}
 	}
 	
-	public int findByStudentId(String studentId) {
+	public Students findByStudentId(String studentId) {
 		Connection connection=null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -56,15 +56,15 @@ public class StudentDAO  extends DatabaseAccessObject<Students>{
 			if(result.isEmpty()){
 				throw new NoSuchElementException("No elements found with the student ID "+ studentId);
 			}
-			return result.get(0).getIdstudent();
+			return result.get(0);
 		}catch(SQLException e){
 			LOGGER.log(Level.WARNING,"StudentDAO:findByStudentId "+e.getMessage());
+			return null;
 		}finally{
 			ConnectionFactory.close(resultSet);
 			ConnectionFactory.close((Statement)statement);
 			ConnectionFactory.close(connection);
 		}
-		return -1;
 	}
 	
 	

@@ -35,12 +35,62 @@ public class TeacherController {
 		teacher.setPersNumbData(userProc.persCode(userId));
 		teacher.setAddressData(userProc.address(userId));
 		teacher.setTaughtCourses(courseProc.allCoursesByTeacher(teacherId), new String[] {"Course"},new TeachersCourseTable());
+		teacher.setFindToSearch();
 		
 		teacher.addNameListener(new NameListener());
 		teacher.addIdNumberListener(new IdListener());
 		teacher.addPersNumListener(new PersNumListener());
 		teacher.addAddressListener(new AddressListener());
 		teacher.addAddListener(new AddListener());
+		teacher.addBackListener(new BackToCoursesListener());
+		teacher.addSearchListener(new SearchListener());
+		teacher.addBackToSearchListener(new BackToSearchListener());
+		
+	}
+	
+	class BackToSearchListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			teacher.setFindToSearch();
+		}
+		
+	}
+	
+	class SearchListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+
+			StudentProcessing studProc = new StudentProcessing();
+			UserProcessing userProc = new UserProcessing();
+			String studentId = teacher.getStudentId();
+			try {
+
+				int userId = studProc.getByStudentId(studentId).getUser_iduser();
+				int group = studProc.getByStudentId(studentId).getGroup_();
+				String name =userProc.userName(userId);
+				String idNum = userProc.idNum(userId);
+				String persNum=userProc.persCode(userId);
+				String address = userProc.address(userId);
+				teacher.setFindToDisplay(group+"", studentId, name, idNum, persNum, address);
+				
+			}catch(NoSuchElementException e) {
+				teacher.showErrorMessage("No student with the entered ID");
+			}
+			
+			
+		}
+		
+	}
+	
+	class BackToCoursesListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			CourseProcessing courseProc = new CourseProcessing();
+			teacher.setTaughtCourses(courseProc.allCoursesByTeacher(teacherId), new String[] {"Course"},new TeachersCourseTable());
+		}
 		
 	}
 	
@@ -60,7 +110,7 @@ public class TeacherController {
 	        	for(int i=0; i<names.size(); i++) {
 	        		students[i]= new Object[] {names.get(i),studIds.get(i)};
 	        	}
-	    		teacher.setTaughtCourses(students, new String[] {"Name","Student ID"},new TeachersStudentTable());
+	    		teacher.setTaughtStudents(students, new String[] {"Name","Student ID"},new TeachersStudentTable());
 	        	
 	       }
 	       }catch(NullPointerException e) {
@@ -92,6 +142,12 @@ public class TeacherController {
 			       }
 			       }catch(NullPointerException e) {
 			    	   
+			       }catch(NumberFormatException e) {
+			    	   teacher.showErrorMessage("Please enter a grade");
+			       }catch(IllegalArgumentException e) {
+			    	   teacher.showErrorMessage("Student already graded");
+			       }catch(NoSuchElementException e) {
+			    	   teacher.showErrorMessage("Student didn't take the exam");
 			       }
 			 
 		 }

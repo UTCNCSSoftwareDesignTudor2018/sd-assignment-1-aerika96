@@ -67,17 +67,20 @@ public class ReportProcessing {
 	public void giveGrades(String courseName, String studentId, int grade) throws NoSuchElementException {
 		DatabaseAccessObject<Students> sDao = new StudentDAO();
 		DatabaseAccessObject<Courses> cDao = new CourseDAO();
-		DatabaseAccessObject<Enrollments> eDao =  new EnrollmentDAO();
+		DatabaseAccessObject<Enrollments> eDao =  new EnrollmentDAO(); 
 		DatabaseAccessObject<Exams> exDao = new ExamDAO();
 		
 		
-		int sId = ((StudentDAO)sDao).findByStudentId(studentId);
+		int sId = (((StudentDAO)sDao).findByStudentId(studentId)).getIdstudent();
 		int cId = cDao.findByName(courseName).getIdcourses();
 		int eId = ((EnrollmentDAO)eDao).findByStudentAndCourse(sId, cId);
 		Exams exam = exDao.findAllBySpecificId("enrollments_id", eId).get(0);
 		if(exam.getGrade()==0) {
 			((ExamDAO)exDao).updateExam(grade, exam.getIdexams());
 			
+		}
+		else {
+			throw new IllegalArgumentException();
 		}
 		
 		

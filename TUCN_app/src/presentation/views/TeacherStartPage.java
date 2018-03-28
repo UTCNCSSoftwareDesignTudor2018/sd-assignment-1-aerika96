@@ -27,16 +27,28 @@ public class TeacherStartPage {
 	JButton changePersonalNumber;
 	JButton changeAddress;
 	JButton addCourse;
+	JButton backToCourse;
+	JButton search;
+	JButton backToSearch;
 	
-	JLabel groupData;
-	JLabel profIdData;
+	
 	JLabel nameData;
 	JLabel idData;
 	JLabel persNumbData;
 	JLabel addressData;
+	
+	JLabel groupData;
+	JLabel studIdData;
+	JLabel studentName;
+	JLabel studentIdNumber;
+	JLabel studentPersNum;
+	JLabel studentAddress;
+	
 	JPanel courses;
+	JPanel findStudent;
 	
 	JTextField course;
+	JTextField studentId;
 	
 	public JTable taughtCourses;
 	
@@ -48,9 +60,21 @@ public class TeacherStartPage {
 		changePersonalNumber = new JButton("CHANGE");
 		changeAddress = new JButton("CHANGE");
 		addCourse =  new JButton("ADD");
+		backToCourse = new JButton("BACK");
+		search = new JButton("SEARCH");
+		backToSearch = new JButton("BACK");
 		
 		groupData = new JLabel();
-		profIdData = new JLabel();
+		studIdData = new JLabel();
+		studentName = new JLabel();
+		studentIdNumber = new JLabel();
+		studentPersNum = new JLabel();
+		studentAddress = new JLabel();
+		
+
+		studentId = new JTextField();
+		
+		
 		nameData = new JLabel();
 		idData = new JLabel();
 		persNumbData = new JLabel();
@@ -95,6 +119,7 @@ public class TeacherStartPage {
 		all.add(courseCreation,BorderLayout.NORTH);
 		all.add(courses,BorderLayout.CENTER);
 		
+		findStudent= new JPanel();
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
@@ -105,6 +130,8 @@ public class TeacherStartPage {
 		tabbedPane.addTab("Courses and grading", all);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 		
+		tabbedPane.addTab("Find student",findStudent);
+		tabbedPane.setMnemonicAt(2, KeyEvent.VK_1);
 		
 		 mainFrame.setLayout(new BorderLayout());
 		 mainFrame.add(tabbedPane,BorderLayout.CENTER);
@@ -115,6 +142,88 @@ public class TeacherStartPage {
 		
 	}
 	
+	
+
+	public String getStudentId() {
+		return studentId.getText();
+	}
+
+	
+	public void setFindToDisplay(String nGroup, String nStudId, String nName, String nId, String nPesNum, String nAddr) {
+		this.findStudent.removeAll();
+		findStudent.add(new JLabel("Group:")); 
+		groupData.setText(nGroup);
+		findStudent.add(groupData);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(new JLabel("Student ID:")); 
+		studIdData.setText(nStudId);
+		findStudent.add(studIdData);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(new JLabel("Name:"));
+		studentName.setText(nName);
+		findStudent.add(studentName);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(new JLabel("ID number:")); 
+		studentIdNumber.setText(nName);
+		findStudent.add(studentIdNumber);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(new JLabel("Personal numerical code:")); 
+		studentPersNum.setText(nPesNum);
+		findStudent.add(studentPersNum);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(new JLabel("Address:")); 
+		studentAddress.setText(nAddr);
+		findStudent.add(studentAddress);
+		findStudent.add(new JLabel());
+		
+		findStudent.add(backToSearch);
+		findStudent.add(new JLabel());
+		findStudent.add(new JLabel());
+		findStudent.setLayout(new GridLayout(0,3));
+		this.findStudent.revalidate();
+		this.findStudent.repaint();
+		
+	}
+	
+
+	public void setFindToSearch() {
+		try {
+		this.findStudent.removeAll();
+		JPanel searchBar = new JPanel();
+		searchBar.add(new JLabel("Student ID: "));
+		searchBar.add(studentId);
+		searchBar.add(search);
+		searchBar.setLayout(new GridLayout(0,3));
+		findStudent.setLayout(new BorderLayout(170,170));
+		findStudent.add(searchBar, BorderLayout.CENTER);
+		findStudent.add(new JPanel(), BorderLayout.NORTH);
+		findStudent.add(new JPanel(), BorderLayout.SOUTH);
+		findStudent.add(new JPanel(),BorderLayout.EAST);
+		findStudent.add(new JPanel(),BorderLayout.WEST);
+		this.findStudent.revalidate();
+		this.findStudent.repaint();
+		}catch(NullPointerException e) {
+			JPanel searchBar = new JPanel();
+			searchBar.add(new JLabel("Student ID: "));
+			searchBar.add(studentId);
+			searchBar.add(search);
+			searchBar.setLayout(new GridLayout(0,3));
+			findStudent.setLayout(new BorderLayout(170,170));
+			findStudent.add(searchBar, BorderLayout.CENTER);
+			findStudent.add(new JPanel(), BorderLayout.NORTH);
+			findStudent.add(new JPanel(), BorderLayout.SOUTH);
+			findStudent.add(new JPanel(),BorderLayout.EAST);
+			findStudent.add(new JPanel(),BorderLayout.WEST);
+
+			
+		}
+		
+	}
 	
 	public String getCourse() {
 		String value = course.getText();
@@ -157,6 +266,21 @@ public class TeacherStartPage {
 		this.courses.revalidate();
 		this.courses.repaint();
 	}
+	public void setTaughtStudents(Object[][] data, String[] headers,MouseAdapter mouse) {
+		JTable taught = new JTable(data,headers) ;
+		this.courses.removeAll();
+		taughtCourses =taught;
+		taughtCourses.setPreferredScrollableViewportSize(new Dimension(500,200));
+		JScrollPane pane= new JScrollPane(taughtCourses,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane.setSize(new Dimension(100,100));
+		this.courses.add(pane);
+		this.courses.add(backToCourse);
+		taughtCourses.addMouseListener(mouse);
+		this.courses.revalidate();
+		this.courses.repaint();
+	}
+	
 	
 	public void addNameListener (ActionListener st){
 		changeName.addActionListener(st);
@@ -176,6 +300,18 @@ public class TeacherStartPage {
 	
 	public void addAddListener (ActionListener st){
 		addCourse.addActionListener(st);
+	}
+	
+	public void addBackListener(ActionListener st) {
+		backToCourse.addActionListener(st);
+	}
+	
+	public void addSearchListener(ActionListener st) {
+		search.addActionListener(st);
+	}
+	
+	public void addBackToSearchListener(ActionListener st) {
+		backToSearch.addActionListener(st);
 	}
 	
 }

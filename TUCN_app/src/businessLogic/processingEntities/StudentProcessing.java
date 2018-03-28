@@ -40,6 +40,13 @@ public class StudentProcessing {
 			}
 	}
 	
+	public Students getByStudentId(String studentId) throws NoSuchElementException {
+
+		DatabaseAccessObject<Students> dao = new StudentDAO();
+		return ((StudentDAO)dao).findByStudentId(studentId);
+		
+	}
+	
 	public Object [][] getAllEnrolled(int id) {
 		DatabaseAccessObject<Enrollments> enDao = new EnrollmentDAO();
 		DatabaseAccessObject<Courses> crsDao = new CourseDAO();

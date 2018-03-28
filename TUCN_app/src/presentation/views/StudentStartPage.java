@@ -147,7 +147,7 @@ public class StudentStartPage implements View {
 	}
 	
 	public void setGroupData(String nGroup) {
-		this.groupData.setText(nGroup);;
+		this.groupData.setText(nGroup);
 	}
 
 	public void setStudentIdData(String nStudId) {
