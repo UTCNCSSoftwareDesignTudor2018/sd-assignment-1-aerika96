@@ -163,6 +163,7 @@ public class TeacherController {
 			CourseProcessing courseProc= new CourseProcessing();
 			try {
 				courseProc.addNewCourse(teacher.getCourse(), teacherId);
+				teacher.setTaughtCourses(courseProc.allCoursesByTeacher(teacherId), new String[] {"Course"},new TeachersCourseTable());
 			}catch(IllegalArgumentException ex){
 				teacher.showErrorMessage(ex.getMessage());
 			}catch(NullPointerException ex) {
